@@ -7,4 +7,5 @@ module TruckitClient
   extend ActiveSupport::Autoload
   autoload :BaseClient
   autoload :User
+  autoload :ServiceApplication
 end
