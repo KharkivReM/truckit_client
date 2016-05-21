@@ -53,7 +53,7 @@ describe TruckitClient::ServiceApplication do |variable|
       expect(application['id']).to be_present
       expect(application['service_type']).to eq('regular')
       expect(application['truck_type']).to eq('mini')
-      expect(application['distance']).to eq('5.0')
+      expect(application['distance']).to eq('7.0')
     end
 
     it 'returns back validation error' do
