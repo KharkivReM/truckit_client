@@ -104,12 +104,12 @@ describe TruckitClient::User  do |variable|
       it 'successfully updates customer data' do
         new_email = Faker::Internet.email
         response = user_client.update(
+          user_id,
           agree_to_terms_flg:   true,
           email:                new_email
         )
 
-        data = response["data"]
-
+        data = response["user"]
         expect(data["id"]).to eq(user_id)
         expect(data['email']).to eq(new_email)
         expect(data["agree_to_terms_flg"]).to eq(true)
@@ -117,11 +117,14 @@ describe TruckitClient::User  do |variable|
 
       it 'doesnt update customer due to invalid email' do
         response = user_client.update(
+          user_id,
           email: "FAKE"
         )
-        expect(response["status"]).to eq("error")
+
         expect(response["errors"]).to be_present
-        expect(response["errors"]["email"]).to include("is invalid")
+        expect(response['errors'][0]['error']).to eq('validation_failed')
+        expect(response["errors"][0]["message"]).to include("is invalid")
+        expect(response["errors"][0]["parameter"]).to eq("email")
       end
     end
   end

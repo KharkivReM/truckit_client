@@ -25,13 +25,15 @@ module TruckitClient
       get_data("/users/#{user_id}")
     end
 
-    def update(email: nil, agree_to_terms_flg: nil, full_name: nil,
+    def update(user_id, email: nil, agree_to_terms_flg: nil, full_name: nil,
       phone_number: nil)
-      modify_data("PUT", '/users') do |json|
-        json.email                  email
-        json.agree_to_terms_flg     agree_to_terms_flg
-        json.full_name              full_name
-        json.phone_number           phone_number
+      modify_data("PUT", "/users/#{user_id}") do |json|
+        json.user do
+          json.email                  email
+          json.agree_to_terms_flg     agree_to_terms_flg
+          json.full_name              full_name
+          json.phone_number           phone_number
+        end
       end
     end
   end

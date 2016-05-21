@@ -8,4 +8,5 @@ module TruckitClient
   autoload :BaseClient
   autoload :User
   autoload :ServiceApplication
+  autoload :Service
 end
