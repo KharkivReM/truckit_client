@@ -86,4 +86,51 @@ describe TruckitClient::Service do |variable|
       expect(response).to eq(false)
     end
   end
+
+  context 'service life cycle' do
+    let(:service_response) do
+      service_client.create(
+        user_id,
+        service_application_id
+      )
+    end
+   
+    let(:service_id) do
+      service_response['service']['id']
+    end
+
+    let(:carrier_email) { 'admin@messenger911.com' }
+    let(:carrier_password) { 'm911_password' }
+
+    let(:login_client) { TruckitClient::User.new(host, version) } 
+    let(:login_response) {
+      login_client.login(
+        email:                  carrier_email,
+        password:               carrier_password,
+      )
+    }
+    let(:carrier_hash) {
+      {
+        uid:            login_response[:uid],
+        client:         login_response[:client],
+        access_token:   login_response[:access_token]
+      }
+    }
+    let(:carrier_service_client) {
+      TruckitClient::Service.new(host, version, carrier_hash)
+    }
+
+
+    it 'goes through successfull cycle' do
+      response = carrier_service_client.start(service_id)
+      expect(response['service']['service_status']).to eq('in_progress')
+      response = carrier_service_client.complete(service_id)
+      expect(response['service']['service_status']).to eq('completed')
+    end
+    
+    it 'makes cancellation' do
+      response = carrier_service_client.cancel(service_id)
+      expect(response['service']['service_status']).to eq('canceled')
+    end
+  end
 end
