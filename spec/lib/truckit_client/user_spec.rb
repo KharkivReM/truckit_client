@@ -13,10 +13,12 @@ describe TruckitClient::User  do |variable|
     describe 'registration' do
       it 'sucessfull register a new user' do
         response = subject.signup(
-          email:                  email,
-          phone_number:           phone_number,
-          password:               password,
-          password_confirmation:  password
+          email,
+          {
+            phone_number:           phone_number,
+            password:               password,
+            password_confirmation:  password
+          }
         )
 
         expect(response["status"]).to eq("success")
@@ -35,16 +37,18 @@ describe TruckitClient::User  do |variable|
     describe "login" do
       before do
         subject.signup(
-          email:                  email,
-          password:               password,
-          password_confirmation:  password
+          email,
+          {
+            password:               password,
+            password_confirmation:  password
+          }
         )
       end
 
       it 'successfully authenticates user with phone number' do
         response = subject.login(
-          email:        email,
-          password:     password
+          email,
+          password
         )
 
         data = response["data"]
@@ -58,8 +62,8 @@ describe TruckitClient::User  do |variable|
 
       it 'returns invalid authentication' do
         response = subject.login(
-          email:        email,
-          password:     'FAKE'
+          email,
+          'FAKE'
         )
 
         expect(response["errors"]).to be_present
@@ -72,9 +76,11 @@ describe TruckitClient::User  do |variable|
     let(:signup_client) { TruckitClient::User.new(host, version) } 
     let(:signup_response) {
       signup_client.signup(
-        email:                  email,
-        password:               password,
-        password_confirmation:  password
+        email,
+        {
+          password:               password,
+          password_confirmation:  password
+        }
       )
     }
     let(:user_id) { signup_response['data']['id'] }
@@ -105,8 +111,10 @@ describe TruckitClient::User  do |variable|
         new_email = Faker::Internet.email
         response = user_client.update(
           user_id,
-          agree_to_terms_flg:   true,
-          email:                new_email
+          {
+            agree_to_terms_flg:   true,
+            email:                new_email
+          }
         )
 
         data = response["user"]
@@ -118,7 +126,9 @@ describe TruckitClient::User  do |variable|
       it 'doesnt update customer due to invalid email' do
         response = user_client.update(
           user_id,
-          email: "FAKE"
+          {
+            email: "FAKE"
+          }
         )
 
         expect(response["errors"]).to be_present
