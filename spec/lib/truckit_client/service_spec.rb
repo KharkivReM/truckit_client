@@ -9,9 +9,11 @@ describe TruckitClient::Service do |variable|
   let(:signup_client) { TruckitClient::User.new(host, version) } 
   let(:signup_response) {
     signup_client.signup(
-      email:                  email,
-      password:               password,
-      password_confirmation:  password
+      email,
+      {
+        password:               password,
+        password_confirmation:  password
+      }
     )
   }
   let(:user_id) { signup_response['data']['id'] }
@@ -105,8 +107,8 @@ describe TruckitClient::Service do |variable|
     let(:login_client) { TruckitClient::User.new(host, version) } 
     let(:login_response) {
       login_client.login(
-        email:                  carrier_email,
-        password:               carrier_password,
+        carrier_email,
+        carrier_password,
       )
     }
     let(:carrier_hash) {

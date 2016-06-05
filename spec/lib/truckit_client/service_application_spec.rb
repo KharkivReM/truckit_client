@@ -9,9 +9,11 @@ describe TruckitClient::ServiceApplication do |variable|
   let(:signup_client) { TruckitClient::User.new(host, version) } 
   let(:signup_response) {
     signup_client.signup(
-      email:                  email,
-      password:               password,
-      password_confirmation:  password
+      email,
+      {
+        password:               password,
+        password_confirmation:  password
+      }
     )
   }
   let(:user_id) { signup_response['data']['id'] }
